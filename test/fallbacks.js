@@ -13,6 +13,22 @@ tests['getenv.disableFallbacks() makes relying on fallbacks an error'] = functio
   getenv.enableFallbacks();
 };
 
+tests['getenv.stopError() should disable errors'] = function() {
+  getenv.disableErrors();
+  assert.strictEqual(getenv.string("url", "http://localhost"), 'http://localhost');
+  assert(getenv.string("url"), undefined);
+  getenv.enableErrors();
+  assert.throws(function() {
+    getenv.string("url");
+  });
+  assert.strictEqual(getenv.string("url", "http://localhost"), 'http://localhost');
+  getenv.disableFallbacks();
+  assert.throws(function() {
+    getenv.string("url", "http://localhost");
+  });
+  getenv.enableFallbacks();
+};
+
 
 Object.keys(tests).forEach(function(key) {
   console.log('Test: %s', key);
